@@ -25,6 +25,14 @@ public class MainActivity extends AppCompatActivity implements AddCityFragment.A
     }
 
     @Override
+    public void editCity(int position, City city) {
+        City existingCity = dataList.get(position);
+        existingCity.setName(city.getName());
+        existingCity.setProvince(city.getProvince());
+        cityAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -45,5 +53,12 @@ public class MainActivity extends AppCompatActivity implements AddCityFragment.A
         fab.setOnClickListener(v -> {
             new AddCityFragment().show(getSupportFragmentManager(), "Add City");
         });
-    }
+
+        cityList.setOnItemClickListener((parent, view, position, id) -> {
+            City selected = cityAdapter.getItem(position);
+            if (selected != null) {
+                AddCityFragment.newInstance(selected.getName(), selected.getProvince(), position)
+                        .show(getSupportFragmentManager(), "Edit City");
+            }
+        });    }
 }
